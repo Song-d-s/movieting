@@ -1,0 +1,20 @@
+//bs-custom.scss
+
+// color
+$primary:       #FCA311 !default;
+$secondary:     #E5E5E5 !default;
+$success:       #20bf55 !default;
+$info:          #01baef !default;
+$warning:       #ff6700 !default;
+$danger:        #e5383b !default;
+$light:         #e8eddf !default;
+$dark:          #212529 !default;
+
+// body
+$body-bg: #212529 !default;
+$body-color: #f8f9fa !default;
+
+// link
+$link-decoration: none !default;
+
+@import "../../../node_modules/bootstrap/scss/bootstrap";

@@ -1,0 +1,185 @@
+<template>
+  <div>
+    <div>
+      <h3>{{username}} 님의 취향 맞춤 영화</h3>
+      <p class="opacity-50">선택과 평점을 기반으로 무비 큐레이터 정민지가 추천하는 취향맞춤 영화들을 소개합니다.</p>
+    </div>
+    <div class="container">
+      <div class="d-flex row gx-3 row-cols-auto justify-content-center">
+        <div class="d-flex col justify-content-center"
+          v-for="movie in movies"
+          :key=movie.id
+        >
+          <MovieListItem 
+          :movie=movie 
+          @click.native="cardSelect"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- {{ movies }} -->
+    <!-- <swiper style="width: 100%; height: 50rem" ref="filterSwiper" :options="swiperOption" role="tablist">
+      <swiper-slide role="tab" v-for="movie in movies" :key=movie.id>
+        <MovieListSurveyItem :movie=movie class="swiper-lazy"/>
+      </swiper-slide>
+      <div class="swiper-scrollbar" slot="scrollbar"></div>
+    </swiper> -->
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
+// import { swiper, swiperSlide } from 'vue-awesome-swiper'
+
+import MovieListItem from '@/components/MovieListItem'
+
+const API_URL = 'http://127.0.0.1:8000'
+
+export default {
+  name: 'RecommendedMovieItem',
+  components: {
+    // swiper,
+    // swiperSlide,
+    MovieListItem,
+  },
+  computed: {
+    username () {
+      return this.$cookies.get("username")
+    },
+  },  
+  data() {
+    return {
+      movies: null,
+      moviesSelected: null,
+      // swiperOption: {
+      //   // height: '100vh',
+      //   direction: 'vertical',
+      //   slidesPerView: 'auto',
+      //   slidesPerColumn: 4,
+      //   spaceBetween: 10,
+      //   freeMode: true,
+      //   scrollbar: {
+      //     el: '.swiper-scrollbar'
+      //   },
+      //   lazy : true,
+      //   mousewheel: true,
+      //   breakpoints: {
+      //     1800: {
+      //       slidesPerColumn: 5,
+      //     },
+      //     1200: {
+      //       slidesPerColumn: 4,
+      //     },
+      //     720: {
+      //       slidesPerColumn: 2,
+      //     },
+      //     320: {
+      //       slidesPerColumn: 1,
+      //     }
+      //   }
+      // }
+    }
+  },
+  methods: {
+    getRandom() {
+      console.log('여기 마즘')
+      const token = this.$cookies.get('jwt')
+      axios({
+        method: 'post',
+        url: `${API_URL}/movies/test/`,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        .then((res) => {
+          console.log(res.data)
+          this.movies = res.data
+        })
+    },
+  },
+  mounted() {
+    this.getRandom()
+  },
+}
+
+
+</script>
+
+
+<style lang="scss" scoped>
+.container{
+  width: 100%;
+  max-height: 850px;
+  padding: 20px 0px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hsla(210,16.7%,97.6%, 0.2);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: hsla(210,16.7%,97.6%, 0.5);
+}
+  // .swiper-container {
+  //   padding: 0 30px; // 여백값을 지정할 경우 슬라이드의 시작점과 종점이 이에 영향을 받아 변경됨
+  //   &:before,
+  //   &:after { // 가상선택자를 활용하여 그라데이션 값 추가
+  //     display: block;
+  //     position: absolute;
+  //     top: 0;
+  //     width: 30px; // container에 준 여백값보다 크지 않게 사이즈 지정하기 (swiper-slide의 클릭 이벤트에 영향을 주지 않고, 이렇게 지정해야 그라데이션이 영역 내부에 있는 탭이 스크롤 하기 전엔 영향을 주지 않음)
+  //     height: 30px;
+  //     z-index: 8;
+  //     content: "";
+  //   }
+  //   &:before {
+  //     left: 0;
+  //     background: linear-gradient(90deg, #212529 -10.19%, rgba(33, 37, 41, 0.8) 18.31%, rgba(33, 37, 41, 0) 75%);
+  //   }
+  //   &:after {
+  //     right: 0;
+  //     background: linear-gradient(270deg, #212529 -10.19%, rgba(33, 37, 41, 0.8) 18.31%, rgba(33, 37, 41, 0) 75%);
+  //   }
+  // }
+
+  // .swiper-container {
+  //   .swiper-wrapper {
+  //     .swiper-slide {
+  //       width: auto; // auto 값을 지정해야 슬라이드의 width값이 텍스트 길이 기준으로 바뀜
+  //       height: auto;
+  //       max-height: 450px;
+  //       // min-width: 56px; // min-width를 지정하지 않을 경우 텍스트가 1개 내지는 2개가 들어갈 때 탭 모양이 상이할 수 있으므로 넣어준다.
+  //       padding: 14px;
+  //       font-size: 14px;
+  //       line-height: 36px;
+  //       text-align: center;
+  //       // color: #84868c;
+  //       border: 0;
+  //       // border-radius: 18px;
+  //       appearance: none;
+  //       cursor: pointer;
+  //       justify-content: center;
+  //       display: flex;
+  //     }
+  //   }
+  // }
+p {
+  border-bottom: 1px solid hsla(210,16.7%,97.6%, 0.1);
+  padding-bottom: 1rem;
+}  
+</style>
